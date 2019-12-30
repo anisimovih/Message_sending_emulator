@@ -4,5 +4,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('send/', views.send_json, name='send_json'),
+    path('api/', views.SendMessages.as_view(), name='api'),
 ]
