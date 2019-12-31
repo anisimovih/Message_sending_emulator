@@ -122,3 +122,18 @@ GET_PUT_SCHEMA = {
         },
     ],
 }
+
+PUT_SCHEMA = {
+    "$schema": "http://json-schema.org/schema",
+    "type": "object",
+    "additionalProperties": False,
+    "properties": {
+        "messages_id": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1
+        }
+    }
+}
