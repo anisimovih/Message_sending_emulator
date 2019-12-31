@@ -7,6 +7,7 @@ POST_SCHEMA = {
     'properties': {
         'Telegram': {
             'type': 'array',
+            "uniqueItems": True,
             'items': {
                 "type": "object",
                 "properties": {
@@ -19,6 +20,7 @@ POST_SCHEMA = {
         },
         'WhatsApp': {
             'type': 'array',
+            "uniqueItems": True,
             'items': {
                 "type": "object",
                 "properties": {
@@ -31,6 +33,7 @@ POST_SCHEMA = {
         },
         'Viber': {
             'type': 'array',
+            "uniqueItems": True,
             'items': {
                 "type": "object",
                 "properties": {

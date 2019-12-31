@@ -1,14 +1,17 @@
 import json
+import redis
 from django.http import JsonResponse
 from django.views import View
-from .tasks import send_message
+from django.views.decorators.csrf import csrf_exempt
 from celery import current_app
 from celery.result import AsyncResult
-from django.views.decorators.csrf import csrf_exempt
-
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 from .schemas import POST_SCHEMA, GET_PUT_SCHEMA
+from .tasks import send_message
+from Message_sending_emulator.settings import CELERY_DB_NUMBER
+
+R = redis.Redis(db=int(CELERY_DB_NUMBER))
 
 
 class SendMessages(View):
@@ -20,7 +23,6 @@ class SendMessages(View):
         return super(SendMessages, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        # logging.info("get")
         self.validate_json(request, GET_PUT_SCHEMA)
         if self.errors:
             return JsonResponse({'error': self.errors}, status=400)
@@ -38,12 +40,17 @@ class SendMessages(View):
         messages_id = []
         for messenger in self.json_data:
             for message in self.json_data[messenger]:
-                task_id = send_message.apply_async((message["user_id"], message["message"]), eta=message["date_time"] if "date_time" in message else None)
-                messages_id.append(str(task_id))
+                task_id = messenger[0] + str(message["user_id"]) + message["message"]
+                if R.exists("celery-task-meta-" + task_id) == 1:
+                    messages_id.append(str('already_exists'))
+                else:
+                    send_message.apply_async((message["user_id"], message["message"]),
+                                             eta=message["date_time"] if "date_time" in message else None,
+                                             task_id=task_id)
+                    messages_id.append(str(task_id))
         return JsonResponse(status=200, data={'Messages added to send queue with id': '%s' % messages_id})
 
     def put(self, request):
-        # logging.info("put")
         self.validate_json(request, GET_PUT_SCHEMA)
         if self.errors:
             return JsonResponse({'error': self.errors}, status=400)
@@ -61,5 +68,3 @@ class SendMessages(View):
             self.errors.append('Invalid JSON')
         except ValidationError as exc:
             self.errors.append(exc.message)
-
-
