@@ -1,4 +1,4 @@
-https://travis-ci.com/anisimovih/Message_sending_emulator.svg?branch=master
+[![Build Status](https://travis-ci.com/anisimovih/Message_sending_emulator.svg?branch=master)](https://travis-ci.com/anisimovih/Message_sending_emulator.svg?branch=master)
 
 # Эмулятор отправки сообщений.
 
