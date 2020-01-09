@@ -27,11 +27,11 @@ class SendMessages(View):
         for messenger in self.json_data:
             for message in self.json_data[messenger]:
                 if [message["sender_id"], message["recipient_id"], message["message"]] in scheduled_tasks_list:
-                    results_list.append('IN QUE')
+                    results_list.append('PENDING')
                 elif [message["sender_id"], message["recipient_id"], message["message"]] in reserved_tasks_list:
-                    results_list.append('IN PROCESS')
+                    results_list.append('SENDING')
                 elif MessagesTable.objects.check_existence_by_text(message["sender_id"], message["recipient_id"], message["message"]):
-                    results_list.append('ALREADY SENT')
+                    results_list.append('SENT')
                 else:
                     results_list.append('NOT FOUND')
         return JsonResponse(status=200, data={"results": results_list})
@@ -45,13 +45,13 @@ class SendMessages(View):
         for messenger in self.json_data:
             for message in self.json_data[messenger]:
                 if [message["sender_id"], message["recipient_id"], message["message"]] in scheduled_tasks_list:
-                    results_list.append('ALREADY IN QUE')
+                    results_list.append('PENDING')
                 elif [message["sender_id"], message["recipient_id"], message["message"]] in reserved_tasks_list:
-                    results_list.append('IN PROCESS')
+                    results_list.append('SENDING')
                 elif MessagesTable.objects.check_existence_by_text(messenger, message["sender_id"], message["recipient_id"], message["message"]):
                     results_list.append('ALREADY SENT')
                 else:
-                    results_list.append('ADDED TO QUE')
+                    results_list.append('ADDED')
                     send_message.apply_async((messenger, message["sender_id"], message["recipient_id"], message["message"]),
                                              eta=message["date_time"] if "date_time" in message else None)
         return JsonResponse(status=200, data={"results": results_list})
@@ -67,7 +67,7 @@ class SendMessages(View):
                 for row in scheduled_tasks_args_and_id:
                     if [message["sender_id"], message["recipient_id"], message["message"]] == row[0]:
                         current_app.control.revoke(row[1])
-                        results_list.append('SUCCESS')
+                        results_list.append('CANCELED')
                         break
                 else:
                     results_list.append('NOT FOUND')
