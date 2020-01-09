@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'Message_sending_emulator.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django_messages',
+        'USER': 'anisimovih',
+        'PASSWORD': 'bhh8qn007',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -123,9 +127,8 @@ STATIC_URL = '/static/'
 
 
 # celery
-CELERY_DB_NUMBER = '0'
-CELERY_BROKER_URL = 'redis://localhost:6379/' + CELERY_DB_NUMBER
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/' + CELERY_DB_NUMBER
+#CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'amqp://myuser:mypassword@localhost:5672/myvhost'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

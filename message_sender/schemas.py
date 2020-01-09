@@ -10,12 +10,14 @@ POST_SCHEMA = {
             "uniqueItems": True,
             'items': {
                 "type": "object",
+                "additionalProperties": False,
                 "properties": {
-                    'user_id': {'type': 'number'},
+                    'sender_id': {'type': 'number'},
+                    'recipient_id': {'type': 'number'},
                     'message': {'type': 'string'},
                     'date_time': {'type': 'string'},
                 },
-                'required': ['user_id', 'message'],
+                'required': ['sender_id', 'recipient_id', 'message'],
             },
         },
         'WhatsApp': {
@@ -23,12 +25,14 @@ POST_SCHEMA = {
             "uniqueItems": True,
             'items': {
                 "type": "object",
+                "additionalProperties": False,
                 "properties": {
-                    'user_id': {'type': 'number'},
+                    'sender_id': {'type': 'number'},
+                    'recipient_id': {'type': 'number'},
                     'message': {'type': 'string'},
                     'date_time': {'type': 'string'},
                 },
-                'required': ['user_id', 'message'],
+                'required': ['sender_id', 'recipient_id', 'message'],
             },
         },
         'Viber': {
@@ -36,12 +40,14 @@ POST_SCHEMA = {
             "uniqueItems": True,
             'items': {
                 "type": "object",
+                "additionalProperties": False,
                 "properties": {
-                    'user_id': {'type': 'number'},
+                    'sender_id': {'type': 'number'},
+                    'recipient_id': {'type': 'number'},
                     'message': {'type': 'string'},
                     'date_time': {'type': 'string'},
                 },
-                'required': ['user_id', 'message'],
+                'required': ['sender_id', 'recipient_id', 'message'],
             },
         },
     },
@@ -62,55 +68,51 @@ GET_PUT_SCHEMA = {
     '$schema': 'http://json-schema.org/schema',
     'type': 'object',
     'additionalProperties': False,
-    'properties':
-        {
-            'Telegram':
-                {
-                    'type': 'object',
-                    'properties':
-                        {
-                            'users_id':
-                                {
-                                    "type": "array",
-                                    "items":
-                                        {'type': 'number', },
-                                    "minItems": 1,
-                                },
-                        },
-                    'required': ['users_id'],
+    'properties': {
+        'Telegram': {
+            'type': 'array',
+            "uniqueItems": True,
+            'items': {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    'sender_id': {'type': 'number'},
+                    'recipient_id': {'type': 'number'},
+                    'message': {'type': 'string'},
                 },
-            'WhatsApp':
-                {
-                    'type': 'object',
-                    'properties':
-                        {
-                            'users_id':
-                                {
-                                    "type": "array",
-                                    "items":
-                                        {'type': 'number', },
-                                    "minItems": 1,
-                                },
-                        },
-                    'required': ['users_id'],
-                },
-            'Viber':
-                {
-                    'type': 'object',
-                    'properties':
-                        {
-                            'users_id':
-                                {
-                                    "type": "array",
-                                    "items":
-                                        {'type': 'number', },
-                                    "minItems": 1,
-                                },
-                        },
-                    'required': ['users_id'],
-                },
+                'required': ['sender_id', 'recipient_id', 'message'],
+            },
         },
-    'anyOf': [
+        'WhatsApp': {
+            'type': 'array',
+            "uniqueItems": True,
+            'items': {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    'sender_id': {'type': 'number'},
+                    'recipient_id': {'type': 'number'},
+                    'message': {'type': 'string'},
+                },
+                'required': ['sender_id', 'recipient_id', 'message'],
+            },
+        },
+        'Viber': {
+            'type': 'array',
+            "uniqueItems": True,
+            'items': {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    'sender_id': {'type': 'number'},
+                    'recipient_id': {'type': 'number'},
+                    'message': {'type': 'string'},
+                },
+                'required': ['sender_id', 'recipient_id', 'message'],
+            },
+        },
+    },
+    "anyOf": [
         {
             'required': ['Telegram'],
         },
@@ -121,19 +123,4 @@ GET_PUT_SCHEMA = {
             'required': ['Viber'],
         },
     ],
-}
-
-PUT_SCHEMA = {
-    "$schema": "http://json-schema.org/schema",
-    "type": "object",
-    "additionalProperties": False,
-    "properties": {
-        "messages_id": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            },
-            "minItems": 1
-        }
-    }
 }
