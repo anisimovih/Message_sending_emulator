@@ -88,8 +88,9 @@ class SendMessages(View):
 
         scheduled_tasks_map = i.scheduled()
         scheduled_tasks_list = []
-        for part in scheduled_tasks_map[list(scheduled_tasks_map)[0]]:
-            scheduled_tasks_list.append((part['request']['args'], part['request']['id']))
+        if scheduled_tasks_map is not None:
+            for part in scheduled_tasks_map[list(scheduled_tasks_map)[0]]:
+                scheduled_tasks_list.append((part['request']['args'], part['request']['id']))
         return scheduled_tasks_list
 
     def tasks_args_list(self):
@@ -97,11 +98,13 @@ class SendMessages(View):
 
         scheduled_tasks_map = i.scheduled()
         scheduled_tasks_list = []
-        for part in scheduled_tasks_map[list(scheduled_tasks_map)[0]]:
-            scheduled_tasks_list.append(part['request']['args'])
+        if scheduled_tasks_map is not None:
+            for part in scheduled_tasks_map[list(scheduled_tasks_map)[0]]:
+                scheduled_tasks_list.append(part['request']['args'])
 
         reserved_tasks_map = i.reserved()
         reserved_tasks_list = []
-        for part in reserved_tasks_map[list(reserved_tasks_map)[0]]:
-            reserved_tasks_list.append(part['request']['args'])
+        if scheduled_tasks_map is not None:
+            for part in reserved_tasks_map[list(reserved_tasks_map)[0]]:
+                reserved_tasks_list.append(part['request']['args'])
         return scheduled_tasks_list, reserved_tasks_list
