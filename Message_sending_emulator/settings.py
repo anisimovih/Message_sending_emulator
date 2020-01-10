@@ -73,9 +73,8 @@ WSGI_APPLICATION = 'Message_sending_emulator.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
+# terminal
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'django_messages',
@@ -83,6 +82,16 @@ DATABASES = {
         'PASSWORD': 'bhh8qn007',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    }
+}'''
+# docker
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -126,9 +135,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# celery
+# Celery
+# terminal
 #CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_BROKER_URL = 'amqp://myuser:mypassword@localhost:5672/myvhost'
+# docker
+CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

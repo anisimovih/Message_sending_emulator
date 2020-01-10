@@ -1,0 +1,11 @@
+.dockignore
+.gitignore
+.travis.yml
+.md
+.txt
+.pdf
+.yml
+.idea/
+/venv
+LICENSE
+Dockerfile

@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    volumes:
+    - pgdata:/var/lib/postgresql/data
+    ports:
+    - '5432:5432'
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis:/data
+    ports:
+      - '6379:6379'
+
+  celery:
+    build: .
+    command: celery -A Message_sending_emulator worker -l info
+    volumes:
+      - .:/app_code
+    depends_on:
+      - redis
+
+  app:
+    build: .
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      PYTHONUNBUFFERED: 'true'
+    ports:
+      - '8000:8000'
+    volumes:
+    - .:/app_code
+    depends_on:
+      - db
+      - celery
+
+volumes:
+  pgdata:
+  redis:
